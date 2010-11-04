@@ -1,0 +1,11 @@
+.DS_STORE
+coverage/*
+pkg/*
+scratch_directory/*
+tmp/*
+*.gem
+RAILS
+.bundle
+Gemfile.lock
+.rvmrc
+rdoc/*
