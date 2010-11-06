@@ -19,10 +19,11 @@ Gem::Specification.new do |s|
 
   s.add_dependency("pg", ["~> 0.9"])
   s.add_dependency("activerecord", ["~> 3"])
+  s.add_dependency("activesupport", ["~> 3"])
 
-  s.add_development_dependency("mocha", ["= 0.9.8"])
+  s.add_development_dependency("mocha", ["~> 0.9.8"])
   s.add_development_dependency("rspec", ["~> 2.0"])
-  s.add_development_dependency("watchr", ["= 0.7"])
+  s.add_development_dependency("watchr", ["~> 0.7"])
   s.add_development_dependency("ruby-debug-wrapper", ["= 0.0.1"])
 
   s.files        = Dir.glob("lib/**/*") + %w(MIT_LICENSE README)
