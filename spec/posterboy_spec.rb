@@ -5,7 +5,11 @@ describe Posterboy do
   describe ".search" do
 
     let!(:user) do
-      User.create(first_name: "Syd", last_name: "Vicious")
+      User.create(
+        first_name: "Syd",
+        last_name: "Vicious",
+        instrument: "bass"
+      )
     end
 
     context "when performing an AND search" do
@@ -27,11 +31,92 @@ describe Posterboy do
 
           context "when the term does not match" do
 
+            let(:results) do
+              User.search(:and, "Nancy")
+            end
+
+            it "returns empty results" do
+              results.should be_empty
+            end
           end
         end
 
         context "when the word is a variation of a stem" do
 
+          context "when the term matches" do
+
+            let(:results) do
+              User.search(:and, "bassist")
+            end
+
+            it "returns the matching results" do
+              results.should == [ user ]
+            end
+          end
+
+          context "when the term does not match" do
+
+            let(:results) do
+              User.search(:and, "bassnotaword")
+            end
+
+            it "returns the matching results" do
+              results.should be_empty
+            end
+          end
+        end
+      end
+
+      context "when provided multiple terms" do
+
+        context "when the terms are stems" do
+
+          context "when the terms match" do
+
+            let(:results) do
+              User.search(:and, "Syd Vicious")
+            end
+
+            it "returns the matching results" do
+              results.should == [ user ]
+            end
+          end
+
+          context "when the term does not match" do
+
+            let(:results) do
+              User.search(:and, "Johnny Rotten")
+            end
+
+            it "returns empty results" do
+              results.should be_empty
+            end
+          end
+        end
+
+        context "when the words are variations of a stem" do
+
+          context "when the terms match" do
+
+            let(:results) do
+              User.search(:and, "bassist basses")
+            end
+
+            it "returns the matching results" do
+              results.should == [ user ]
+            end
+          end
+
+          context "when the terms do not match" do
+
+            let(:results) do
+              User.search(:and, "bassnotaword bassthis")
+            end
+
+            it "returns the matching results" do
+              results.should be_empty
+            end
+          end
         end
       end
     end
