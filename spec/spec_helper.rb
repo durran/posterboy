@@ -9,6 +9,13 @@ $LOAD_PATH.unshift(MODELS)
 
 require "posterboy"
 
+config = {
+  database: "posterboy",
+  adapter: "postgresql",
+}
+
+ActiveRecord::Base.establish_connection(config)
+
 Dir[ File.join(MODELS, "*.rb") ].sort.each { |file| require File.basename(file) }
 
 RSpec.configure do |config|

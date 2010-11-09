@@ -2,15 +2,16 @@ require "spec_helper"
 
 describe Posterboy do
 
-  describe ".search" do
+  before(:all) do
+    User.delete_all
+    User.create(
+      first_name: "Syd",
+      last_name: "Vicious",
+      instrument: "flute"
+    )
+  end
 
-    let!(:user) do
-      User.create(
-        first_name: "Syd",
-        last_name: "Vicious",
-        instrument: "bass"
-      )
-    end
+  describe ".search" do
 
     context "when performing an AND search" do
 
@@ -24,8 +25,12 @@ describe Posterboy do
               User.search(:and, "Syd")
             end
 
-            it "returns the matching results" do
-              results.should == [ user ]
+            it "returns the correct number of results" do
+              results.count.should == 1
+            end
+
+            it "returns the correct results" do
+              results.first.first_name.should == "Syd"
             end
           end
 
@@ -46,18 +51,22 @@ describe Posterboy do
           context "when the term matches" do
 
             let(:results) do
-              User.search(:and, "bassist")
+              User.search(:and, "flutes")
             end
 
-            it "returns the matching results" do
-              results.should == [ user ]
+            it "returns the correct number of matching results" do
+              results.count.should == 1
+            end
+
+            it "returns the correct matching results" do
+              results.first.first_name.should == "Syd"
             end
           end
 
           context "when the term does not match" do
 
             let(:results) do
-              User.search(:and, "bassnotaword")
+              User.search(:and, "flutenotaword")
             end
 
             it "returns the matching results" do
@@ -77,8 +86,12 @@ describe Posterboy do
               User.search(:and, "Syd Vicious")
             end
 
-            it "returns the matching results" do
-              results.should == [ user ]
+            it "returns the correct matching results" do
+              results.first.first_name.should == "Syd"
+            end
+
+            it "returns the correct number of results" do
+              results.count.should == 1
             end
           end
 
@@ -99,11 +112,15 @@ describe Posterboy do
           context "when the terms match" do
 
             let(:results) do
-              User.search(:and, "bassist basses")
+              User.search(:and, "flute")
             end
 
             it "returns the matching results" do
-              results.should == [ user ]
+              results.first.first_name.should == "Syd"
+            end
+
+            it "returns the correct number of results" do
+              results.count.should == 1
             end
           end
 
