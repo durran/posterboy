@@ -1,0 +1,8 @@
+Usage:
+
+class User < ActiveRecord::Base
+  has_many :tags, through: :user_tags
+  search_on :first_name, :last_name, tags: :name
+end
+
+User.search("Syd Vicious")
